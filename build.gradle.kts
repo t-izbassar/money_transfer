@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin("jvm") version "1.3.41"
     application
+    id("com.diffplug.gradle.spotless") version "3.23.1"
 }
 
 repositories {
@@ -29,4 +30,19 @@ tasks.test {
 val compileKotlin: KotlinCompile by tasks
 compileKotlin.kotlinOptions {
     allWarningsAsErrors = true
+}
+
+spotless {
+    kotlin {
+        ktlint().userData(mapOf(
+            "indent_size" to "4",
+            "continuation_indent_size" to "4"
+        ))
+    }
+    kotlinGradle {
+        ktlint().userData(mapOf(
+            "indent_size" to "4",
+            "continuation_indent_size" to "4"
+        ))
+    }
 }
