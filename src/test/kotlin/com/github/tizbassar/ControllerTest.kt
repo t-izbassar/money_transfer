@@ -1,6 +1,5 @@
 package com.github.tizbassar
 
-import com.github.tizbassar.Controller.hello
 import com.github.tizbassar.Controller.transfer
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
@@ -18,16 +17,6 @@ import org.junit.jupiter.params.provider.CsvSource
 import kotlin.test.assertEquals
 
 internal class ControllerTest {
-
-    @Test
-    fun shouldGreet() = withTestApplication({
-        hello()
-    }) {
-        with(handleRequest(HttpMethod.Get, "/hello")) {
-            assertEquals(HttpStatusCode.OK, response.status())
-            assertEquals("Hello, World!", response.content)
-        }
-    }
 
     @Test
     @Disabled
@@ -73,7 +62,6 @@ internal class ControllerTest {
     }
 
     @ParameterizedTest
-    @Disabled
     @CsvSource(
             "1, 2, inv",
             "inv, 2, 100",
@@ -87,7 +75,6 @@ internal class ControllerTest {
         transfer()
     }) {
         val call = requestTransfer(from, to, amount)
-        println("$from, $to, $amount")
 
         with(call) {
             assertEquals(HttpStatusCode.BadRequest, response.status())
