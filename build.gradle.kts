@@ -11,12 +11,18 @@ repositories {
 }
 
 val junitVersion = "5.5.0"
+val ktorVersion = "1.2.2"
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
+    implementation("io.ktor:ktor-server-netty:$ktorVersion")
+    implementation("org.slf4j:slf4j-simple:1.7.26")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
     testImplementation(kotlin("test"))
+    testImplementation("io.ktor:ktor-server-test-host:$ktorVersion") {
+        exclude("ch.qos.logback")
+    }
 }
 
 application {
