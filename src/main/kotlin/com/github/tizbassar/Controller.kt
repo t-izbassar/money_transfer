@@ -10,7 +10,7 @@ import io.ktor.routing.routing
 
 object Controller {
 
-    fun Application.transfer() {
+    fun Application.transfer(transferService: TransferService) {
         routing {
             post("/accounts/transfer") {
                 val parameters = call.receiveParameters()
@@ -18,7 +18,20 @@ object Controller {
                 if (request == null) {
                     call.respond(HttpStatusCode.BadRequest)
                 } else {
-                    call.respond(HttpStatusCode.OK)
+                    when (transferService.transfer(request)) {
+                        is TransferResult.Success ->
+                            call.respond(HttpStatusCode.OK)
+                        is TransferResult.NotEnoughBalance ->
+                            call.respond(HttpStatusCode.notEnoughBalance)
+                        is TransferResult.SourceAccountNotFound ->
+                            call.respond(HttpStatusCode.sourceAccountNotFound)
+                        is TransferResult.SourceAccountLocked ->
+                            call.respond(HttpStatusCode.sourceAccountLocked)
+                        is TransferResult.TargetAccountNotFound ->
+                            call.respond(HttpStatusCode.targetAccountNotFound)
+                        is TransferResult.TargetAccountLocked ->
+                            call.respond(HttpStatusCode.targetAccountLocked)
+                    }
                 }
             }
         }
@@ -34,3 +47,18 @@ object Controller {
         }
     }
 }
+
+val HttpStatusCode.Companion.notEnoughBalance: HttpStatusCode
+    get() = HttpStatusCode(450, "Not enough balance")
+
+val HttpStatusCode.Companion.sourceAccountNotFound: HttpStatusCode
+    get() = HttpStatusCode(451, "Source account not found")
+
+val HttpStatusCode.Companion.sourceAccountLocked: HttpStatusCode
+    get() = HttpStatusCode(452, "Source account locked")
+
+val HttpStatusCode.Companion.targetAccountNotFound: HttpStatusCode
+    get() = HttpStatusCode(453, "Target account not found")
+
+val HttpStatusCode.Companion.targetAccountLocked: HttpStatusCode
+    get() = HttpStatusCode(454, "Target account locked")

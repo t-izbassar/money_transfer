@@ -24,6 +24,7 @@ dependencies {
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion") {
         exclude("ch.qos.logback")
     }
+    testImplementation("io.mockk:mockk:1.9.3")
 }
 
 application {
