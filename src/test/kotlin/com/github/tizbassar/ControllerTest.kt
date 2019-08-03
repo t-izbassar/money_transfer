@@ -59,7 +59,10 @@ internal class ControllerTest {
         "$validFrom, $lockedTo, $validAmount, 454"
     )
     fun shouldConvertTransferResultsToAppropriateStatusCodes(
-        from: AccountId, to: AccountId, amount: Money, statusCode: Int
+        from: AccountId,
+        to: AccountId,
+        amount: Money,
+        statusCode: Int
     ) = withTestApplication({
         transfer(transferService)
     }) {
